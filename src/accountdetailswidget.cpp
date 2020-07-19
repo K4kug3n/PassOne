@@ -3,10 +3,13 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 
+#include "utils.h"
+
 AccountDetailsWidget::AccountDetailsWidget():
     siteNameLabel(new QLabel(this)),
     loginLabel(new QLabel(this)),
     passwordLabel(new QLabel(this)),
+    passwordStrengthBar(new PasswordStrengthBar(this)),
     backButton(new QPushButton(this)),
     editButton(new QPushButton(this)),
     deleteButton(new QPushButton(this))
@@ -28,6 +31,8 @@ void AccountDetailsWidget::setLogin(std::string const& login)
 void AccountDetailsWidget::setPassword(std::string const& password)
 {
     passwordLabel->setText(QString::fromStdString(password));
+
+    passwordStrengthBar->setValue(getPasswordStrength(password));
 }
 
 void AccountDetailsWidget::setId(size_t newId)
@@ -38,6 +43,8 @@ void AccountDetailsWidget::setId(size_t newId)
 void AccountDetailsWidget::setupInterface()
 {
     QVBoxLayout * mainLayout{ new QVBoxLayout };
+
+    unsigned spacing{ 10 };
 
     /* Set title */
     QLabel * title{ new QLabel( "Account Details", this ) };
@@ -51,30 +58,34 @@ void AccountDetailsWidget::setupInterface()
 
     /* Set Name */
     QHBoxLayout * nameLayout{ new QHBoxLayout };
-    nameLayout->setSpacing(10);
+    nameLayout->setSpacing(spacing);
     nameLayout->addWidget(new QLabel{ "Site name : ", this }, 0, Qt::AlignRight);
     siteNameLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
     nameLayout->addWidget(siteNameLabel, 0, Qt::AlignLeft);
-    //mainLayout->addLayout(nameLayout);
     detailsLayout->addLayout(nameLayout);
 
     /* Set Login */
     QHBoxLayout * loginLayout{ new QHBoxLayout };
-    loginLayout->setSpacing(10);
+    loginLayout->setSpacing(spacing);
     loginLayout->addWidget(new QLabel{ "Your login : ", this }, 0, Qt::AlignRight);
     loginLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
     loginLayout->addWidget(loginLabel, 0, Qt::AlignLeft);
-    //mainLayout->addLayout(loginLayout);
     detailsLayout->addLayout(loginLayout);
 
     /* Set Password */
     QHBoxLayout * passwordLayout{ new QHBoxLayout };
-    passwordLayout->setSpacing(10);
+    passwordLayout->setSpacing(spacing);
     passwordLayout->addWidget(new QLabel{ "Your password : ", this }, 0, Qt::AlignRight);
     passwordLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
     passwordLayout->addWidget(passwordLabel, 0, Qt::AlignLeft);
-    //mainLayout->addLayout(passwordLayout);
     detailsLayout->addLayout(passwordLayout);
+
+    /* Set Password Strength */
+    QHBoxLayout * passwordStrengthLayout{ new QHBoxLayout };
+    passwordStrengthLayout->setSpacing(spacing);
+    passwordStrengthLayout->addWidget(new QLabel{"Your password strength : ", this }, 0, Qt::AlignRight);
+    passwordStrengthLayout->addWidget(passwordStrengthBar, 0, Qt::AlignLeft);
+    detailsLayout->addLayout(passwordStrengthLayout);
 
     mainLayout->addLayout(detailsLayout);
 

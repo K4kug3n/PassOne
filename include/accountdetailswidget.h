@@ -6,6 +6,7 @@
 #include <QWidget>
 #include <QLabel>
 #include <QPushButton>
+#include "passwordstrengthbar.h"
 
 class AccountDetailsWidget : public QWidget
 {
@@ -33,6 +34,8 @@ private:
     QLabel * siteNameLabel;
     QLabel * loginLabel;
     QLabel * passwordLabel;
+
+    PasswordStrengthBar * passwordStrengthBar;
 
     QPushButton * backButton;
     QPushButton * editButton;

@@ -4,12 +4,16 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QKeyEvent>
+#include <QProgressBar>
+
+#include "utils.h"
 
 AccountFormWidget::AccountFormWidget():
     titleLabel(createLabel("", 15)),
     nameLineEdit(new QLineEdit()),
     loginLineEdit(new QLineEdit()),
     passwordLineEdit(new QLineEdit()),
+    passwordStrengthBar(new PasswordStrengthBar()),
     cancelButton(new QPushButton("Cancel")),
     acceptButton(new QPushButton("Accept"))
 
@@ -86,6 +90,16 @@ void AccountFormWidget::setupInterface()
 
     mainLayout->addLayout(formLayout);
 
+    /* Set Pwd Strength Bar */
+    QHBoxLayout * passwordStrengthLayout{ new QHBoxLayout() };
+    passwordStrengthLayout->setContentsMargins(0, 0, 0, 50);
+    passwordStrengthLayout->addWidget(createLabel(tr("Password Strength : "), 10));
+
+    passwordStrengthBar->setValue(0);
+    passwordStrengthLayout->addWidget(passwordStrengthBar);
+
+    mainLayout->addLayout(passwordStrengthLayout);
+
     /* Set Button */
     QHBoxLayout * buttonLayout{ new QHBoxLayout() };
     buttonLayout->setSpacing(100);
@@ -103,6 +117,12 @@ void AccountFormWidget::setupConnections()
 {
     connect(acceptButton, &QPushButton::clicked, this, &AccountFormWidget::valid);
     connect(cancelButton, &QPushButton::clicked, this, &AccountFormWidget::cancel);
+
+    connect(passwordLineEdit, &QLineEdit::textEdited, this, [&](const QString &text){
+        unsigned score{ getPasswordStrength(text.toStdString()) };
+
+        passwordStrengthBar->setValue(score);
+    });
 }
 
 void AccountFormWidget::reset()

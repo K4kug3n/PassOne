@@ -5,9 +5,12 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QProgressBar>
 
 #include <string>
 #include <optional>
+
+#include "passwordstrengthbar.h"
 
 class AccountFormWidget : public QWidget
 {
@@ -46,6 +49,8 @@ private:
     QLineEdit * nameLineEdit;
     QLineEdit * loginLineEdit;
     QLineEdit * passwordLineEdit;
+
+    PasswordStrengthBar * passwordStrengthBar;
 
     QPushButton * cancelButton;
     QPushButton * acceptButton;
